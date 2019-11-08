@@ -1,9 +1,10 @@
-import requests
 import re
 import time
-from lxml import etree
+from lxml import html
+import requests
 
 WEBSITE_TO_START=r"https://8zt.cc"
+HOW_MANY_COUS_OF_SOAP=12
 CUPS_OF_SOAP={}
 
 def deal_with_single_result(page,soap):
@@ -14,7 +15,7 @@ def deal_with_single_page(page):
     if ( not r ) or r.status_code != 200 :
         return None
 
-    tree=etree.HTML(r.content)
+    tree=html.etree.HTML(r.content)
     thiz = tree.xpath('//*[@id="sentence"]')
     for item in thiz:
         if item.text:
@@ -40,7 +41,7 @@ def run():
     while(next_page):
         next_page=deal_with_single_page(next_page)
         count+=1
-        if(count>2000):
+        if(count>HOW_MANY_COUS_OF_SOAP):
             print("\nstopping....")
             break
         post_action_of_single_page(count)
